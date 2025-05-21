@@ -1,0 +1,212 @@
+<html>
+<head>
+<title>
+Generate Random String
+</title>
+</head>
+<script>
+
+function filterLength()
+{
+	let txt2Check = document.getElementById('txtLength');
+	let str2BeChecked = txt2Check.value;
+	let strChecked = str2BeChecked.replace(/[^0-9]/g, '');
+	txt2Check.value = strChecked;
+}
+
+function checkOptions()
+{
+	const idsChk = [ 'chkUpper', 'chkLower', 'chkDigit', 'chkSpecial' ];
+	const idsTxt = [ 'txtUpper', 'txtLower', 'txtDigit', 'txtSpecial' ];
+	for(let i=0; i < idsChk.length; i++)
+	{
+		let btnChk = document.getElementById(idsChk[i]);
+		let txt2Set = document.getElementById(idsTxt[i]);
+		if(btnChk.checked == true)
+			txt2Set.readOnly = false;
+		else
+			txt2Set.readOnly = true;
+	}
+}
+
+function filterUpper()
+{
+	let txt2Check = document.getElementById('txtUpper');
+	let set2Check = new Set(txt2Check.value);
+	let str2BeChecked = Array.from(set2Check).join('');
+	let strChecked = str2BeChecked.replace(/[^A-Z]/g, '');
+	txt2Check.value = strChecked;
+}
+
+function filterLower()
+{
+	let txt2Check = document.getElementById('txtLower');
+	let set2Check = new Set(txt2Check.value);
+	let str2BeChecked = Array.from(set2Check).join('');
+	let strChecked = str2BeChecked.replace(/[^a-z]/g, '');
+	txt2Check.value = strChecked;
+}
+
+function filterDigit()
+{
+	let txt2Check = document.getElementById('txtDigit');
+	let set2Check = new Set(txt2Check.value);
+	let str2BeChecked = Array.from(set2Check).join('');
+	let strChecked = str2BeChecked.replace(/[^0-9]/g, '');
+	txt2Check.value = strChecked;
+}
+
+function filterSpecial()
+{
+	let txt2Check = document.getElementById('txtSpecial');
+	let set2Check = new Set(txt2Check.value);
+	let str2BeChecked = Array.from(set2Check).join('');
+	let strChecked = str2BeChecked.replace(/[\x20A-Za-z0-9]/g, '');
+	txt2Check.value = strChecked;
+}
+
+function resetOptions()
+{
+	const idsChk = [ 'chkUpper', 'chkLower', 'chkDigit', 'chkSpecial' ];
+	const idsTxt = [ 'txtUpper', 'txtLower', 'txtDigit', 'txtSpecial' ];
+	const valTxt = [ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz', '0123456789', '!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~' ];
+	for(let i=0; i < idsChk.length; i++)
+	{
+		let btnChk = document.getElementById(idsChk[i]);
+		btnChk.checked = false;
+		let txt2Set = document.getElementById(idsTxt[i]);
+		txt2Set.value = valTxt[i];
+	}
+}
+
+function checkThenSubmit()
+{
+	let cntChk = 0, i = 0, len2Gen = 0;
+	len2Gen = parseInt(txtLength.value);
+	if((len2Gen > 7) && (len2Gen < 256))
+	{
+		const idsChk = [ 'chkUpper', 'chkLower', 'chkDigit', 'chkSpecial' ];
+		const idsTxt = [ 'txtUpper', 'txtLower', 'txtDigit', 'txtSpecial' ];
+		for(i=0; i < idsChk.length; i++)
+		{
+			let btnChk = document.getElementById(idsChk[i]);
+			if(btnChk.checked == true)
+			{
+				let txt2Send = document.getElementById(idsTxt[i]);
+				if(txt2Send.value.length == 0)
+				{
+					cntChk = 0;
+					break;
+				}
+				cntChk += 1;
+			}
+		}
+		if (cntChk > 0)
+			frmGenerate.submit();
+		else
+		{
+			switch (i)
+			{
+			case 0:
+				alert('Use Uppercase Alphabets With No Data in Stock is Invalid...');
+				break;
+			case 1:
+				alert('Use Lowercase Alphabets With No Data in Stock is Invalid...');
+				break;
+			case 2:
+				alert('Use Digits With No Data in Stock is Invalid...');
+				break;
+			case 3:
+				alert('Use Special Characters With No Data in Stock is Invalid...');
+				break;
+			default:
+				alert('Should Set Option(s) Before Generate Random String!');
+				break;
+			}
+		}
+	}
+	else
+		alert('Length of Random String Should be Set Between 8 and 255!');
+}
+
+</script>
+<body>
+<center>
+<form id=frmGenerate method="post" target="ifrRndOut" action="RndOut.aspx">
+<table>
+	<tr>
+		<td colspan=2 align=center>
+			<h1>Generate Random String</h1>
+			<h3>Using Given Options</h3>
+		</td>
+	</tr>
+	<tr>
+		<td align=left>
+			Length of Random String:&nbsp;
+		</td>
+		<td align=left>
+			<input type=text id=txtLength name="txtLength" value="12" size=40 oninput="filterLength();">
+		</td>
+	</tr>
+	<tr>
+		<td align=left>
+			<input type=checkbox id=chkUpper name="chkType[]" value="0" onclick="checkOptions();">&nbsp;Use Uppercase Alphabets:&nbsp;
+		</td>
+		<td align=left>
+			<input type=text id=txtUpper name="txtPwd[]" size=40 value="" maxlength=26 readonly oninput="filterUpper();">
+		</td>
+	</tr>
+	<tr>
+		<td align=left>
+			<input type=checkbox id=chkLower name="chkType[]" value="1" onclick="checkOptions();">&nbsp;Use Lowercase Alphabets:&nbsp;
+		</td>
+		<td align=left>
+			<input type=text id=txtLower name="txtPwd[]" size=40 value="" maxlength=26 readonly oninput="filterLower();">
+		</td>
+	</tr>
+	<tr>
+		<td align=left>
+			<input type=checkbox id=chkDigit name="chkType[]" value="2" onclick="checkOptions();">&nbsp;Use Digits:&nbsp;
+		</td>
+		<td align=left>
+			<input type=text id=txtDigit name="txtPwd[]" size=40 value="" maxlength=10 readonly oninput="filterDigit();">
+		</td>
+	</tr>
+	<tr>
+		<td align=left>
+			<input type=checkbox id=chkSpecial name="chkType[]" value="3" onclick="checkOptions();">&nbsp;Use Special Characters:&nbsp;
+		</td>
+		<td align=left>
+			<input type=text id=txtSpecial name="txtPwd[]" size=40 value="" maxlength=32 readonly oninput="filterSpecial();">
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td align=left>
+			<input type=button id=btnReset value="Reset Options" onclick="resetOptions();">
+		</td>
+		<td align=right>
+			<input type=button id=btnGeneerate value="Generate String" onclick="checkThenSubmit();">
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2>
+			&nbsp;
+		</td>
+	</tr>
+</table>
+</form>
+<iframe id="ifrRndOut" name="ifrRndOut" title="Inline Random Output Frame" style="border:0px; width:515px; height:85px;" src="RndOut.aspx">
+</iframe>
+</center>
+</body>
+<script>
+
+resetOptions();
+
+</script>
+</html>
